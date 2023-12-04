@@ -9,27 +9,59 @@ import Home from './Components/Home';
 import Register from './Components/Both/Register';
 import Login from './Components/Both/Login';
 import ArtisanDashboard from './Components/Artisan/ArtisanDashboard';
-import ProductListing from './Components/Artisan/CardItem';
+
 import ProductDetails from './Components/Artisan/ProductDetails';
 import Order from './Components/Buyer/Order'; // Import your Order component
-import Product from './Components/Artisan/Product';
+import ListOfProducts from './Components/Artisan/ListOfProducts';
+import { products } from "./Components/Data";
+import { useState } from "react";
+
 function App() {
-  const appStyle = {
-    backgroundColor: 'beige',
-    minHeight: '100%',
-  };
-
-  // Dummy data for products and artisans
-  const products = [
-    // Your product data here
-  ];
-
-  const artisans = [
-    // Your artisan data here
-  ];
-
+  
+    const [product, setProduct] = useState(products);
+    const [sum, setSum] = useState(0);
+  
+    const handleIncrement = (id) => {
+      setProduct(
+        product.map((elt) => {
+          if (elt.id === id) {
+            return { ...elt, qte: elt.qte + 1 };
+          }
+          return elt;
+        })
+      );
+    };
+    const handleDecrement = (id) => {
+      setProduct(
+        product.map((elt) => {
+          if (elt.id === id && elt.qte > 0) {
+            return { ...elt, qte: elt.qte - 1 };
+          }
+          return elt;
+        })
+      );
+    };
+  
+    const handleDelete = (id) => {
+      setProduct(product.filter((elt) => elt.id !== id));
+    };
+  
+    const handleSumIncrement = (price) => {
+      setSum(sum + price);
+    };
+    const handleSumDecrement = (article) => {
+      if (article.qte > 0) {
+        setSum(sum - article.price);
+      }
+    };
+  
+    const handleSumDelete = (article) => {
+      setSum(sum - article.price * article.qte);
+    };
+  
+  
   return (
-    <div style={appStyle}>
+    <div >
       <Router>
         <NavigationBar />
         <Routes>
@@ -39,13 +71,28 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<ArtisanDashboard />} />
-          <Route path="/productList" element={<ProductListing />} />
-          <Route path="/products" element={<Product />} />
-          <Route
-            path="/products/:productId"
-            element={<ProductDetails products={products} artisans={artisans} />}
-          />
+          
+         
           <Route path="/order" element={<Order />} />
+         
+        <Route
+          path="/products"
+          element={
+            <ListOfProducts
+              product={product}
+              handleIncrement={handleIncrement}
+              handleDecrement={handleDecrement}
+              handleDelete={handleDelete}
+              sum={sum}
+              handleSumIncrement={handleSumIncrement}
+              handleSumDecrement={handleSumDecrement}
+              handleSumDelete={handleSumDelete}
+            />
+          }
+        />
+         <Route path= "/products/:id" element ={<ProductDetails product={product}  />}  />
+
+          {/* The /products route can be removed or adjusted as needed */}
         </Routes>
       </Router>
     </div>
