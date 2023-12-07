@@ -1,72 +1,164 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import {jwtDecode} from 'jwt-decode';
+import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+import "../../Profile.css"
+import { FaShoppingBag } from 'react-icons/fa'; // Make sure to install react-icons using npm or yarn
 
-const BuyerProfile = ({ buyer, onUpdate, onDelete }) => {
-  const [formData, setFormData] = useState({
-    name: buyer.name,
-    email: buyer.email,
-    password: '', // you might want to handle password separately
-    phoneNumber: buyer.phoneNumber,
-    address: buyer.address,
-    creditCardNumber: buyer.creditCardNumber,
-  });
+function BuyerProfile() {
+    const url = "http://localhost:6006/api/buyer";
+    const [user, setUser] = useState({});
+    const [userId, setUserId] = useState(null);
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    const [userUpdate, setUserUpdate] = useState({});
 
-  const handleInputChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const getGreeting = () => {
+      const hour = new Date().getHours();
+      if (hour < 12) return "Good morning";
+      if (hour < 18) return "Good afternoon";
+      return "Good evening";
   };
 
-  const handleUpdateProfile = () => {
-    // Implement logic to update the buyer's profile
-    // You may want to add validation and error handling
-    onUpdate(formData);
-  };
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            const decodedToken = jwtDecode(token);
+            setUserId(decodedToken.id);
+        }
+    }, []);
 
-  const handleDeleteProfile = () => {
-    // Implement logic to delete the buyer's profile
-    // You may want to add confirmation and error handling
-    onDelete();
-  };
+    useEffect(() => {
+        if (userId) {
+            const headers = { 'Authorization': `Bearer ${localStorage.getItem("token")}` };
+            axios.get(`${url}/${userId}`, { headers })
+                .then((res) => {
+                    const fetchedUser = res.data.buyer[0];
+                    setUser(fetchedUser);
+                    setUserUpdate(fetchedUser);
 
-  return (
-    <div>
-      <h2>Buyer Profile</h2>
-      <label>
-        Name:
-        <input type="text" name="name" value={formData.name} onChange={handleInputChange} />
-      </label>
-      <br />
-      <label>
-        Email:
-        <input type="email" name="email" value={formData.email} onChange={handleInputChange} />
-      </label>
-      <br />
-      <label>
-        Password:
-        <input type="password" name="password" value={formData.password} onChange={handleInputChange} />
-      </label>
-      <br />
-      <label>
-        Phone Number:
-        <input type="text" name="phoneNumber" value={formData.phoneNumber} onChange={handleInputChange} />
-      </label>
-      <br />
-      <label>
-        Address:
-        <input type="text" name="address" value={formData.address} onChange={handleInputChange} />
-      </label>
-      <br />
-      <label>
-        Credit Card Number:
-        <input type="text" name="creditCardNumber" value={formData.creditCardNumber} onChange={handleInputChange} />
-      </label>
-      <br />
-      <button onClick={handleUpdateProfile}>Update Profile</button>
-      <button onClick={handleDeleteProfile}>Delete Profile</button>
-    </div>
-  );
-};
+                })
+                .catch((error) => {
+                    console.error(error.response.data.msg);
+                });
+        }
+    }, [userId]);
+
+    const handleChange = (e) => {
+        setUserUpdate({ ...userUpdate, [e.target.name]: e.target.value });
+    };
+
+    const handleUpdate = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.put(`${url}/${user.id}`, userUpdate);
+        } catch (error) {
+            console.error(error);
+        }
+        handleClose();
+        window.location.reload();
+    };
+
+    return (
+        <>  
+            <div className="profile-container">
+                <h3 className="welcome-back">Welcome Back</h3>
+                <Card className="profile-card">
+                    {user.image && <Card.Img variant="top" src={user.image} />}
+                    <Card.Body>
+                        <div className="user-detail">
+                            <h6>Name:</h6>
+                            <Card.Text>{user.name}</Card.Text>
+                        </div>
+                        <div className="user-detail">
+                            <h6>Email:</h6>
+                            <Card.Text>{user.email}</Card.Text>
+                        </div>
+                        <div className="user-detail">
+                            <h6>Address:</h6>
+                            <Card.Text>{user.address}</Card.Text>
+                        </div>
+                        <div className="user-detail">
+                            <h6>Phone Number:</h6>
+                            <Card.Text>{user.phonenumber}</Card.Text>
+                        </div>
+                        <div className="user-detail">
+                            <h6>Credit Card:</h6>
+                            <Card.Text>{user.creditcardnumber}</Card.Text>
+                        </div>
+                        <div className="update-button">
+                            <Button variant="success" onClick={handleShow}>Update</Button>
+                        </div>
+                    </Card.Body>
+                </Card>
+            </div>
+           
+            <Modal show={show} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Update Information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleUpdate}>
+                        {/* Repeat the form group for each field you want to make editable */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                defaultValue={user?.name}
+                                onChange={handleChange}
+                                name="name"
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label> email </Form.Label>
+                            <Form.Control
+                                type="text"
+                                defaultValue={user?.email}
+                                onChange={handleChange}
+                                name="email"
+                            />
+                        </Form.Group>
+                        {/* ... other form groups for email, address, etc. ... */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Phone Number</Form.Label>
+                            <Form.Control
+                                type="text"
+                                defaultValue={user?.phonenumber}
+                                onChange={handleChange}
+                                name="phonenumber"
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Credit Card Number</Form.Label>
+                            <Form.Control
+                                type="text"
+                                defaultValue={user?.creditcardnumber}
+                                onChange={handleChange}
+                                name="creditcardnumber"
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>password </Form.Label>
+                            <Form.Control
+                                type="text"
+                                defaultValue={user?.password}
+                                onChange={handleChange}
+                                name="password"
+                            />
+                        </Form.Group>
+
+                        <Button variant="primary" type="submit">
+                            Submit
+                        </Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+        </>
+    );
+}
 
 export default BuyerProfile;

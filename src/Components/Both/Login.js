@@ -32,7 +32,7 @@ const Login = () => {
         const token = response.data.token;
         localStorage.setItem("token", token);
         if (response.data.user.role === 'user') {
-          navigate('/products');
+          navigate('/buyerProfile');
         } else {
           navigate('/dashboard');
         }

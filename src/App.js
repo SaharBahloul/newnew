@@ -13,13 +13,31 @@ import ArtisanDashboard from './Components/Artisan/ArtisanDashboard';
 import ProductDetails from './Components/Artisan/ProductDetails';
 import Order from './Components/Buyer/Order'; // Import your Order component
 import ListOfProducts from './Components/Artisan/ListOfProducts';
-import { products } from "./Components/Data";
+
 import { useState } from "react";
+import axios from "axios"; 
+import { useEffect } from "react";
+import BuyerProfile from './Components/Buyer/BuyerProfile';
 
 function App() {
   
-    const [product, setProduct] = useState(products);
+    
+  const [product, setProduct] = useState([]);
+
+ 
     const [sum, setSum] = useState(0);
+    const [artisans, setArtisans] = useState([]);
+
+    // Fetch artisans data once and store it in state
+    useEffect(() => {
+      axios.get("http://localhost:6006/api/artisans")
+        .then(res => {
+          setArtisans(res.data.artisans);
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }, []);
   
     const handleIncrement = (id) => {
       setProduct(
@@ -71,6 +89,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<ArtisanDashboard />} />
+          <Route path="/buyerProfile" element={<BuyerProfile/>} />
           
          
           <Route path="/order" element={<Order />} />
@@ -87,10 +106,13 @@ function App() {
               handleSumIncrement={handleSumIncrement}
               handleSumDecrement={handleSumDecrement}
               handleSumDelete={handleSumDelete}
+              setProduct={ setProduct}
+              artisans={artisans} 
+
             />
           }
         />
-         <Route path= "/products/:id" element ={<ProductDetails product={product}  />}  />
+        <Route path="/products/:id" element={<ProductDetails product={product} setProduct={setProduct}   artisans={artisans}  />} />
 
           {/* The /products route can be removed or adjusted as needed */}
         </Routes>

@@ -29,7 +29,7 @@ export const products = [
     description: "The 11-inch iPad Pro display has rounded corners...",
     price: 55,
     qte: 0,
-    brand: "Apple",
+    region: "sfax",
     rating: 1,
     image:
     "https://cdn.refurb.eu//files/refurb.eu/BareboneProductFile/239-apple-ipad-pro-105.jpg",
@@ -38,7 +38,7 @@ export const products = [
   {
     id: 1,
     name: "LAPTOP",
-    description: "HP NoteBook is a Windows 10 laptop...",
+    description: "HP NoteBook is a Windows 10 laptop jkbikj ojjk, ikojloj,  oijoij lop...",
     price: 25,
     qte: 0,
     rating: 2,

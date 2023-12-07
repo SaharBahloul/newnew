@@ -5,9 +5,12 @@ import Badge from "react-bootstrap/Badge";
 import { useNavigate } from "react-router-dom";
 import ReadMore from "./ReadMore";
 
+
+
+
 export default function CardItem({
   elt,
-  artisans,
+  artisans = [],
   details,
   handleIncrement,
   handleDecrement,
@@ -33,8 +36,9 @@ export default function CardItem({
   const artisan = artisans.find(a => a.id === elt.artisanId);
   const navigate = useNavigate();
   const showDetails = () => {
-    navigate(`/products/${elt.id}`);
+    navigate(`/products/${elt.id}`, { state: { artisans: artisans } });
   };
+  
 
   const stars = [...Array(5)].map((item, i) => {
     return (
@@ -59,7 +63,7 @@ export default function CardItem({
       >
         <div style={{ display: "flex", gap: "20px" }}>
           <Card.Title> {elt.name} </Card.Title>
-          {details && <Card.Title> {elt.brand} </Card.Title>}
+          {details && <Card.Title> {elt.region} </Card.Title>}
           <Card.Text>{elt.price} $</Card.Text>
           
         {artisan && <Card.Text>Artisan: {artisan.name}</Card.Text>}
