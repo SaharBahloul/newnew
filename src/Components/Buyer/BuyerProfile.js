@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import "../../Profile.css"
-import { FaShoppingBag } from 'react-icons/fa'; // Make sure to install react-icons using npm or yarn
+import { FaUserCircle, FaEnvelope, FaHome, FaPhone, FaCreditCard, FaEdit } from 'react-icons/fa';
+import "../../Profile.css";
+
 
 function BuyerProfile() {
     const url = "http://localhost:6006/api/buyer";
