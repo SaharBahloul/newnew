@@ -1,78 +1,125 @@
 import React from 'react';
-import { FaShippingFast, FaDollarSign, FaHandsHelping, FaMobileAlt } from 'react-icons/fa'; // Ensure react-icons is installed
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import tunisia1 from '../images/tunisia1.jpg';
+import tunisia2 from '../images/tunisia2.jpg';
+import tunisia3 from '../images/tunisia3.jpg';
 
-function Advantages() {
-  return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Why Choose Us?</h1>
-
-      <div style={styles.advantagesGrid}>
-        <div style={styles.advantageItem}>
-          <FaShippingFast style={styles.icon} />
-          <h3 style={styles.itemTitle}>Fast Shipping</h3>
-          <p>Get your products delivered rapidly with our efficient logistics.</p>
-        </div>
-
-        <div style={styles.advantageItem}>
-          <FaDollarSign style={styles.icon} />
-          <h3 style={styles.itemTitle}>Affordable Prices</h3>
-          <p>Experience the best quality at competitive prices.</p>
-        </div>
-
-        <div style={styles.advantageItem}>
-          <FaHandsHelping style={styles.icon} />
-          <h3 style={styles.itemTitle}>Customer Support</h3>
-          <p>Our dedicated team is always here to help you with any queries.</p>
-        </div>
-
-        <div style={styles.advantageItem}>
-          <FaMobileAlt style={styles.icon} />
-          <h3 style={styles.itemTitle}>User-Friendly App</h3>
-          <p>Enjoy a seamless shopping experience with our intuitive mobile app.</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const styles = {
-  container: {
-    textAlign: 'center',
-    padding: '50px 20px',
-    fontFamily: 'Arial, sans-serif',
-    backgroundColor: '#F5F5F5',
-    color: '#333',
-  },
-  title: {
-    fontSize: '2.5rem',
-    marginBottom: '40px',
-  },
-  advantagesGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-    gap: '30px',
-    marginTop: '20px',
-  },
-  advantageItem: {
-    padding: '20px',
-    borderRadius: '10px',
-    backgroundColor: '#FFF',
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    minHeight: '250px',
+const Advantages = () => {
+  const containerStyle = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    padding: '50px',
+    fontFamily: 'Arial, sans-serif',
+    backgroundColor: 'beige',
+    marginTop:"5px"
+  };
+
+  const cardContainerStyle = {
+    display: 'flex',
+    flexWrap: 'wrap',
     justifyContent: 'center',
-  },
-  icon: {
-    fontSize: '3rem',
-    color: '#34bd78',
-    marginBottom: '15px',
-  },
-  itemTitle: {
-    fontSize: '1.5rem',
-    marginBottom: '15px',
-  }
+    gap: '20px',
+  };
+
+  const cardStyle = {
+    width: '300px',
+    borderRadius: '8px',
+    overflow: 'hidden',
+    boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
+  };
+
+  const imageStyle = {
+    width: '100%',
+    height: '200px',
+    objectFit: 'cover',
+    borderTopLeftRadius: '8px',
+    borderTopRightRadius: '8px',
+  };
+
+  const contentStyle = {
+    padding: '20px',
+    backgroundColor: '#fff',
+    borderBottomLeftRadius: '8px',
+    borderBottomRightRadius: '8px',
+  };
+
+  const headingStyle = {
+    fontSize: '24px',
+    marginBottom: '10px',
+    color: '#333',
+  };
+
+  const textStyle = {
+    fontSize: '16px',
+    color: '#555',
+  };
+
+  const ctaSectionStyle = {
+    textAlign: 'center',
+    marginTop: '20px',
+  };
+
+  const buttonStyle = {
+    padding: '12px 24px',
+    background: '#34bd78',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    fontSize: '18px',
+    textDecoration: 'none', // Remove the default link styling
+    display: 'inline-block',
+  };
+
+  const advantages = [
+    {
+      image: tunisia1,
+      title: 'Unique Handcrafted Products',
+      description: 'Discover a curated collection of unique handcrafted products, created with passion and attention to detail.',
+    },
+    {
+      image: tunisia2,
+      title: 'Artisanal Expertise',
+      description: 'Our artisans are skilled craftsmen dedicated to producing high-quality, one-of-a-kind items that reflect their expertise.',
+    },
+    {
+      image: tunisia3,
+      title: 'Secure Transactions',
+      description: 'Shop with confidence using our secure payment gateways, ensuring your financial information is protected.',
+    },
+    {
+      title: 'Personalized Experience',
+      description: 'Enjoy a personalized shopping experience with tailored recommendations based on your preferences and interests.',
+    },
+  ];
+
+  return (
+    <div style={containerStyle}>
+      <div style={cardContainerStyle}>
+        {advantages.map((advantage, index) => (
+          <div key={index} style={cardStyle}>
+            {advantage.image && <img src={advantage.image} alt={advantage.title} style={imageStyle} />}
+            <div style={contentStyle}>
+              <h2 style={headingStyle}>{advantage.title}</h2>
+              <p style={textStyle}>{advantage.description}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={ctaSectionStyle}>
+        <h3 style={{ fontSize: '24px', marginBottom: '10px', color: '#333' }}>Ready to Explore?</h3>
+        <p style={textStyle}>
+          Start your journey with Carthagecraft today and immerse yourself in a world of artistry and craftsmanship.
+        </p>
+        {/* Update the button to link to the products page */}
+        <Link to="/products" style={buttonStyle}>
+          See Products
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 export default Advantages;

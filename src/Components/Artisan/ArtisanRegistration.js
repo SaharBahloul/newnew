@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import logo from "../../images/logo.jpg";
 import { Link } from 'react-router-dom';
-
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 const ArtisanRegistration = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -17,6 +17,8 @@ const ArtisanRegistration = () => {
   });
 
   const [showProductFields, setShowProductFields] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -33,6 +35,25 @@ const ArtisanRegistration = () => {
       [field]: file,
     }));
   };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Update the API endpoint based on the backend changes
+    axios
+    .post("http://localhost:6006/api/artisan/register", formData)
+    .then((response) => {
+      console.log(response.data);
+      setIsSubmitted(true);
+      
+      // Redirect to the buyer's profile after successful registration
+      navigate('/artisan-profile');
+    })
+    .catch((error) => {
+      console.error("There was an error!", error);
+      setIsSubmitted(false);
+    });
+};
+  
 
   const handleAddProduct = () => {
     setShowProductFields(true);
@@ -42,13 +63,7 @@ const ArtisanRegistration = () => {
     setShowProductFields(false);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Implement logic to handle form submission (e.g., send data to the server)
-    console.log('Form submitted:', formData);
-    // You can handle the image separately, such as uploading it to a server.
-    // formData.profileImage and formData.productImage contain the selected image files.
-  };
+  
 
   const formStyle = {
     maxWidth: '500px',
@@ -59,9 +74,7 @@ const ArtisanRegistration = () => {
     fontFamily: 'sans-serif',
     marginTop: '20px',
   };
-  const linkStyle = {
-    color: '#2d9ccf',
-  };
+
   const labelStyle = {
     display: "block",
     margin: '15px 0',
@@ -76,12 +89,6 @@ const ArtisanRegistration = () => {
     marginBottom: '9px',
   };
 
-  const logoStyle = {
-    marginLeft: "20%", // Adjust the margin-left as needed
-    marginBottom: "20px",
-    padding: "1px", // Adjust the height as needed
-  };
-
   const textareaStyle = {
     width: '100%',
     padding: '8px',
@@ -93,9 +100,7 @@ const ArtisanRegistration = () => {
     marginBottom: '10px',
   };
 
-  const RegisterStyle = {
-    background: '#34bd78',
-    color: 'white',
+  const buttonStyle = {
     padding: '10px',
     border: '2px gray solid ',
     borderRadius: '4px',
@@ -103,20 +108,22 @@ const ArtisanRegistration = () => {
     marginRight: '10px',
   };
 
-  const AddStyle = {
-    background: '#42555f',
-    color: 'white',
-    padding: '10px',
-    border: '2px gray solid ',
-    borderRadius: '4px',
-    cursor: 'pointer',
-    marginRight: '10px',
+  const linkStyle = {
+    color: '#2d9ccf',
+  };
+  const pageStyle = {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop:"5px"
   };
 
   return (
-    <body style={{ padding: "20px", margin: "1px", backgroundColor: "beige", paddingLeft: "50px", marginTop: "4px", paddingRight: "55px" }}>
-      <form style={formStyle} onSubmit={handleSubmit}>
-        <h2>Welcome to Artisan Panel</h2>
+   
+    <body style={{ padding: '20px', margin: '-10px', paddingLeft: '40px', marginTop: '10px', paddingRight: '45px' }}>
+       <div style={pageStyle}>
+       <form style={formStyle} onSubmit={handleSubmit}>
+         <h2 style={{ textAlign: 'center', color: 'black' , margin:"20px"}}>Welcome to Artisan Panel</h2>
+       
         <label style={labelStyle}>
           Name:
           <input type="text" name="name" value={formData.name} onChange={handleInputChange} style={inputStyle} />
@@ -172,26 +179,23 @@ const ArtisanRegistration = () => {
             Login here
           </Link>
         </p>
-            <img
-        src={logo}
-        alt="CarthageCraft Logo"
-        width="50%"
-        style={logoStyle}
-      />
+       
           </>
         
         )}
 
-        <button type="button" style={AddStyle} onClick={handleAddProduct}>
+<button type="button" style={{ ...buttonStyle, background: '#42555f', color: 'white' }} onClick={handleAddProduct}>
           Add Product
         </button>
-        <button type="button" style={AddStyle} onClick={handleNotNow}>
+        <button type="button" style={{ ...buttonStyle, background: '#42555f', color: 'white' }} onClick={handleNotNow}>
           Not Now
         </button>
-        <button type="submit" style={RegisterStyle}>
+        <button type="submit" style={{ ...buttonStyle, background: '#34bd78', color: 'white' }}>
           Register
         </button>
+        {isSubmitted && <div style={{ color: '#34bd78', marginTop: '15px', fontSize: '16px', fontWeight: 'bold' }}>Artisan added successfully!</div>}
       </form>
+      </div>
     </body>
   );
 };

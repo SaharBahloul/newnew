@@ -3,9 +3,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
-import { NavLink } from "react-router-dom";  // Change to NavLink
+import { NavLink } from "react-router-dom"; // Import Link
 
-import logo1 from "../../images/logo1.jpg";  // Adjust the import path
+import logo1 from "../../images/logo1.jpg";
 
 function NavigationBar() {
     const linkStyle = {
@@ -14,7 +14,7 @@ function NavigationBar() {
         padding: "25px",
         margin: "0px"
     };
-    
+
     const LogoStyle = {
         marginTop: "-5px",
         marginLeft: "50px",
@@ -25,7 +25,6 @@ function NavigationBar() {
         <>
             <Navbar bg="white" data-bs-theme="dark">
                 <Container>
-                    {/* Use NavLink instead of Link */}
                     <NavLink to="/" style={LogoStyle}>
                         <img
                             src={logo1}
@@ -43,14 +42,22 @@ function NavigationBar() {
                             <NavLink to="/" style={linkStyle}> Home </NavLink>
                         </Nav.Link>
                         <Nav.Link>
-                            <NavLink to="/register" style={linkStyle}>Register</NavLink>
-                        </Nav.Link>
-                        <Nav.Link>
                             <NavLink to="/advantages" style={linkStyle}>Advantages</NavLink>
                         </Nav.Link>
                         <Nav.Link>
                             <NavLink to="/how-it-works" style={linkStyle}>HIW</NavLink>
                         </Nav.Link>
+                        <Nav.Link>
+                            <NavLink to="/register" style={linkStyle}>Register</NavLink>
+                        </Nav.Link>
+                        <Nav.Link>
+                            <NavLink to="/products" style={linkStyle}>Products</NavLink>
+                        </Nav.Link>
+                        <Nav.Link>
+                            <NavLink to="/buyerProfile" style={linkStyle}>BuyerProfile</NavLink>
+                        </Nav.Link>
+                        {/* Add a Nav.Link with Link for Artisan Profile */}
+                        
                     </Nav>
                 </Container>
             </Navbar>

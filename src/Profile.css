@@ -35,11 +35,13 @@
     font-weight: bold; 
 } 
  
-.update-button { 
-    display: flex; 
-    justify-content: center; 
-    margin-top: 40px; 
-} 
+.update-button {
+    display: flex;
+    justify-content: center;
+    gap: 10px; /* Adjust the gap as needed */
+    margin-top: 40px;
+}
+
  
 .welcome-back { 
     font-size: 24px; 

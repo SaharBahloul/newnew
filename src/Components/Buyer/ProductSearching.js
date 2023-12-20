@@ -1,41 +1,75 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { FaSearch } from "react-icons/fa";
 
 const ProductSearch = ({ onSearch }) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [category, setCategory] = useState('');
-  const [maxPrice, setMaxPrice] = useState('');
-  const [region, setRegion] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchType, setSearchType] = useState("category"); // default to category
 
-  const handleSearch = () => {
-    // Call the onSearch prop with the search criteria
-    onSearch({ searchTerm, category, maxPrice, region });
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleTypeChange = (e) => {
+    setSearchType(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSearch({ searchTerm, searchType });
+  };
+
+  const searchContainerStyle = {
+    display: "flex",
+    alignItems: "center",
+    maxWidth: "500px",
+    margin: "auto",
+    marginBottom: "20px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    borderRadius: "8px",
+    overflow: "hidden",
+  };
+
+  const searchInputStyle = {
+    flex: 1,
+    padding: "12px",
+    borderRadius: "8px 0 0 8px",
+    border: "none",
+    outline: "none",
+  };
+
+  const searchButtonStyle = {
+    background: "#34bd78",
+    color: "#fff",
+    border: "none",
+    padding: "12px 20px",
+    borderRadius: "0 8px 8px 0",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+  };
+
+  const searchIconStyle = {
+    marginRight: "8px",
   };
 
   return (
-    <div>
-      <h2>Product Search</h2>
-      <label>
-        Search by Name:
-        <input type="text" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Category:
-        <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Maximum Price:
-        <input type="number" value={maxPrice} onChange={(e) => setMaxPrice(e.target.value)} />
-      </label>
-      <br />
-      <label>
-        Region:
-        <input type="text" value={region} onChange={(e) => setRegion(e.target.value)} />
-      </label>
-      <br />
-      <button onClick={handleSearch}>Search</button>
-    </div>
+    <form style={searchContainerStyle} onSubmit={handleSubmit}>
+      <select value={searchType} onChange={handleTypeChange}>
+        <option value="category">Category</option>
+        <option value="region">Region</option>
+      </select>
+      <input
+        type="text"
+        placeholder={`Search by ${searchType}...`}
+        style={searchInputStyle}
+        value={searchTerm}
+        onChange={handleChange}
+      />
+      <button type="submit" style={searchButtonStyle}>
+        <FaSearch style={searchIconStyle} />
+        Search
+      </button>
+    </form>
   );
 };
 
